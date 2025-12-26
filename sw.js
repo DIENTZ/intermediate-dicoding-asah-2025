@@ -1,4 +1,4 @@
-const CACHE_NAME = "dylan-story-v19"; // Saya naikkan versi agar cache lama terhapus
+const CACHE_NAME = "dylan-story-v20"; // Update versi
 const PRECACHE_ASSETS = [
   "./",
   "./index.html",
@@ -36,9 +36,12 @@ self.addEventListener("fetch", (event) => {
   const request = event.request;
   const url = new URL(request.url);
 
-  // === PERBAIKAN PENTING: ABAIKAN CHROME EXTENSION ===
-  // Kode ini mencegah error "Request scheme 'chrome-extension' is unsupported"
-  // yang membuat CSS kamu hilang.
+  // === FIX UTAMA: HANYA PROSES METHOD GET ===
+  // Cache API tidak mendukung POST/DELETE/PUT.
+  // Kode ini akan menghilangkan error merah di console kamu.
+  if (request.method !== "GET") return;
+
+  // === FILTER: ABAIKAN CHROME EXTENSION ===
   if (!url.protocol.startsWith("http")) return;
 
   // 1. STRATEGI UNTUK API (Network First)
